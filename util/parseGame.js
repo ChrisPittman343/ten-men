@@ -13,9 +13,13 @@ const parseGame = (text) => {
 };
 
 const getMetaData = (text) => {
-  let metaData = toPrettyArray(
-    text.slice(0, /Download\s+GOTV\s+Replay/.exec(text).index)
-  ).slice(-4);
+  // todo: in some games, there is no replay... I.e. no button.
+
+  const endIx =
+    /Download\s+GOTV\s+Replay/.exec(text)?.index ||
+    /Player\s+Name\s+Ping\s+K\s+A\s+D\s+★\s+HSP\s+Score/.exec(text).index;
+
+  let metaData = toPrettyArray(text.slice(0, endIx)).slice(-4);
 
   const minsSeconds = metaData[3]
     .split(":")
@@ -34,7 +38,7 @@ const getPlayerData = (text) => {
     text.slice(
       /Player\s+Name\s+Ping\s+K\s+A\s+D\s+★\s+HSP\s+Score/.exec(text).index
     )
-  );
+  ).slice(1, 22); // Remove table head, cut off after last player
 
   // Grab score and remove from player array
   const score = playerDataArray
@@ -55,14 +59,20 @@ const getPlayerData = (text) => {
   };
 };
 
+// Stats in form PING KILLS ASSISTS DEATHS ★MVP HS% SCORE
+// If MVP = 1, only ★ is shown
+// If either MVP or HS are 0, they are empty
 const parseIndividual = ([username, statsRow]) => {
-  // Remove the star and split for easy parseInt usage
   const stats = statsRow.split(/\s+/);
 
-  if (stats.length === 6)
-    stats.splice(4, 0, 0); // No MVP stars, insert MVP count as 0
-  else if (stats[4] === "★") stats[4] = "1"; // Single star means = 1 MVP
-  else stats[4] = stats[4].replace("★", ""); // Remove all stars, can't parse them
+  // Inserted values must be strings so .replace() can be called on them
+  //
+  if (stats.length === 5) stats.splice(4, 0, "0", "0");
+  else if (stats.length === 6)
+    stats.splice(stats[4].includes("%") ? 4 : 5, 0, "0");
+
+  if (stats[4] === "★") stats[4] = "1";
+  stats[4] = stats[4].replace("★", ""); // Remove all stars, can't parseInt
 
   return {
     username,
@@ -83,7 +93,6 @@ const toPrettyArray = (arr) =>
   arr
     .split("\n")
     .map((str) => str.trim().replace(/\s+/, " "))
-    .filter((val) => val.length)
-    .slice(1);
+    .filter((val) => val.length);
 
 module.exports = parseGame;

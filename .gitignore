@@ -1,8 +1,9 @@
 /.vscode
 /node_modules
 
-/database/*.db
-/database/*.mwb
-/database/*.bak
+# Database + models
+*.db
+*.mwb
+*.bak
 
 *.env

@@ -1,0 +1,30 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS Matches (
+    matchID INTEGER PRIMARY KEY,
+    datePlayed INTEGER NOT NULL,
+    map TEXT NOT NULL,
+    duration INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Teams (
+    teamID INTEGER PRIMARY KEY,
+    matchID INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    FOREIGN KEY (matchID) REFERENCES Matches(matchID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS TeamMembers (
+    teamID INTEGER NOT NULL,
+    playerName TEXT NOT NULL,
+    username TEXT NOT NULL,
+    ping INTEGER NOT NULL,
+    kills INTEGER NOT NULL,
+    assists INTEGER NOT NULL,
+    deaths INTEGER NOT NULL,
+    mvp INTEGER NOT NULL,
+    hs INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    PRIMARY KEY (teamID, playerName),
+    FOREIGN KEY (teamID) REFERENCES Teams(teamID) ON DELETE CASCADE
+);
