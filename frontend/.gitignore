@@ -1,5 +1,8 @@
 /node_modules/
-/public/build/
 /public/ps/
+
+# Keep the build folder in, so heroku doesn't have to build it itself
+# /public/build/
+
 
 .DS_Store
