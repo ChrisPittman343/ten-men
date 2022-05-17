@@ -14,6 +14,7 @@ module.exports = session({
   resave: false,
   saveUninitialized: false,
   cookie: {
+    sameSite: "none",
     secure: !config.dev,
     maxAge: 8 * 7 * 24 * 60 * 60 * 1000, // 8 weeks
   },
