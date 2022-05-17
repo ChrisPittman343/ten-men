@@ -1,8 +1,52 @@
-const fs = require("fs");
-const Database = require("better-sqlite3");
-const path = require("path");
-const db = new Database("./database/tenMen.db", { verbose: console.log });
+const config = require("../config");
+const { Pool } = require("pg");
 
-db.exec(fs.readFileSync(path.join(__dirname, "/sql/init.sql"), "utf8"));
+const db = new Pool({
+  connectionString: config.dev
+    ? config.localConnection
+    : config.postgresConnection,
+  ssl: config.dev ? false : undefined,
+  max: 2,
+});
+
+db.connect();
+
+db.query(`CREATE TABLE IF NOT EXISTS matches (
+  matchID SMALLSERIAL,
+  map VARCHAR(16) NOT NULL,
+  datePlayed BIGINT NOT NULL,
+  duration SMALLINT NOT NULL,
+  CONSTRAINT matches_pkey PRIMARY KEY (matchID)
+)`);
+
+db.query(`CREATE TABLE IF NOT EXISTS teams (
+  matchID SMALLINT,
+  teamID SMALLSERIAL,
+  roundsWon SMALLINT NOT NULL,
+  CONSTRAINT teamID_Unique UNIQUE (teamID) INCLUDE(teamID),
+  CONSTRAINT teams_matches_fk FOREIGN KEY (matchID) REFERENCES matches (matchID) ON UPDATE CASCADE ON DELETE CASCADE,
+  PRIMARY KEY (matchID, teamID)
+)`);
+
+db.query(`CREATE TABLE IF NOT EXISTS teammembers (
+  teamID SMALLINT,
+  playerName VARCHAR(32),
+  ping SMALLINT NOT NULL,
+  kills SMALLINT NOT NULL,
+  assists SMALLINT NOT NULL,
+  deaths SMALLINT NOT NULL,
+  hs SMALLINT NOT NULL DEFAULT 0,
+  mvp SMALLINT NOT NULL DEFAULT 0,
+  score SMALLINT NOT NULL,
+  username VARCHAR(32) NOT NULL,
+  CONSTRAINT teammembers_teams_fk FOREIGN KEY (teamID) REFERENCES teams (teamID) ON UPDATE CASCADE ON DELETE CASCADE,
+  PRIMARY KEY (teamID, playerName)
+)`);
+
+db.query(`CREATE TABLE IF NOT EXISTS playericons (
+  playerName VARCHAR(32) NOT NULL,
+  src VARCHAR(1024) NOT NULL,
+  PRIMARY KEY (playerName)
+)`);
 
 module.exports = db;

@@ -4,9 +4,9 @@ const express = require("express");
 const boom = require("express-boom");
 const path = require("path");
 const logger = require("morgan");
-const db = require("./database/db");
 const session = require("./middleware/session");
 const config = require("./config");
+const db = require("./database/db");
 
 const apiRoutes = require("./routes/api");
 
@@ -25,7 +25,7 @@ app.use("/", apiRoutes);
 // Serve svelte files
 app.use(
   express.static(path.join(__dirname, "frontend/public"), {
-    maxAge: config.dev ? "" : "30d",
+    maxAge: config.dev ? undefined : "30d",
   })
 );
 app.use("/", (req, res) => {

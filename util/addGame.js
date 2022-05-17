@@ -1,33 +1,33 @@
-const addGame = (db, gameData) => {
+const addGame = async (db, gameData) => {
   try {
     if (!dataIsValid(gameData)) throw Error("Data is invalid.");
 
-    const insertMatch = db.prepare(
-      "INSERT INTO Matches (map, datePlayed, duration) VALUES (?, ?, ?)"
-    );
-    const insertTeam = db.prepare(
-      "INSERT INTO Teams (matchID, score) VALUES (?, ?)"
-    );
-    const insertTeamMember = db.prepare(
-      "INSERT INTO TeamMembers (teamID, playerName, username, ping, kills, assists, deaths, mvp, hs, score) VALUES (?,?,?,?,?,?,?,?,?,?)"
-    );
+    const insertMatchSQL =
+      "INSERT INTO Matches (map, datePlayed, duration) VALUES ($1, $2, $3) RETURNING matchID";
+    const insertTeamSQL =
+      "INSERT INTO Teams (matchID, roundsWon) VALUES ($1, $2) RETURNING teamID";
+    const insertTeamMemberSQL =
+      "INSERT INTO TeamMembers (teamID, playerName, username, ping, kills, assists, deaths, mvp, hs, score) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
 
-    const insertAll = db.transaction(
-      ({ map, datePlayed, duration, score, teams }) => {
-        const matchID = insertMatch.run(
-          map,
-          datePlayed,
-          duration
-        ).lastInsertRowid;
+    await db.query("BEGIN");
+    const { rows } = await db.query(insertMatchSQL, [
+      gameData.map,
+      gameData.datePlayed,
+      gameData.duration,
+    ]);
+    const { matchid: matchID } = rows[0];
 
-        teams.forEach((team, teamNum) => {
-          const teamID = insertTeam.run(
-            matchID,
-            score[teamNum]
-          ).lastInsertRowid;
+    await Promise.all(
+      gameData.teams.map(async (team, teamNum) => {
+        const { rows } = await db.query(insertTeamSQL, [
+          matchID,
+          gameData.score[teamNum],
+        ]);
+        const { teamid: teamID } = rows[0];
 
-          team.forEach((member) => {
-            insertTeamMember.run(
+        await Promise.all(
+          team.map(async (member) => {
+            await db.query(insertTeamMemberSQL, [
               teamID,
               member.playerName,
               member.username,
@@ -37,17 +37,16 @@ const addGame = (db, gameData) => {
               member.deaths,
               member.mvp,
               member.hs,
-              member.score
-            );
-          });
-        });
-      }
+              member.score,
+            ]);
+          })
+        );
+      })
     );
-
-    insertAll(gameData);
-
+    await db.query("COMMIT");
     return true;
   } catch (error) {
+    await db.query("ROLLBACK");
     return false;
   }
 };

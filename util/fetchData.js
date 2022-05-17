@@ -2,20 +2,34 @@
  * Returns top player and most recent match data
  * @param {*} db
  */
-const getOverview = (db) => {
+const getOverview = async (db) => {
   let recentMatch = {};
-  const statsForMatches = db
-    .prepare(
-      `
-    SELECT *, Teams.score roundsWon FROM Matches 
-    INNER JOIN Teams USING(matchID)
-    INNER JOIN TeamMembers USING(teamID)
-    GROUP BY teamID, playerName
+
+  const { rows: statsForMatches } = await db.query(
+    `
+    SELECT  TeamMembers.playername "playerName", 
+            username,
+            ping,
+            kills,
+            assists,
+            deaths,
+            hs,
+            mvp,
+            score,
+            Teams.teamID "teamID", 
+            roundsWon "roundsWon", 
+            Matches.matchID "matchID", 
+            map, 
+            duration, 
+            datePlayed "datePlayed" 
+    FROM Matches 
+    INNER JOIN Teams USING (matchID)
+    INNER JOIN TeamMembers USING (teamID)
+    GROUP BY TeamMembers.teamID, playerName, Matches.matchID, Matches.datePlayed, Matches.map, Matches.duration, Teams.matchID, Teams.teamID
     ORDER BY datePlayed DESC, TeamMembers.teamID DESC, TeamMembers.score DESC
     LIMIT 10
     `
-    )
-    .all();
+  );
 
   statsForMatches.forEach((stats) => {
     if (!recentMatch.matchID)
@@ -23,7 +37,7 @@ const getOverview = (db) => {
         matchID: stats.matchID,
         map: stats.map,
         duration: stats.duration,
-        datePlayed: stats.datePlayed,
+        datePlayed: parseInt(stats.datePlayed),
         players: [],
       };
 
@@ -33,38 +47,36 @@ const getOverview = (db) => {
   });
 
   // Get top 5 overall players' stats to display
-  const topPlayers = db
-    .prepare(
-      `
-    SELECT playerName, 
-            ROUND(AVG(kills)) avgKills, 
-            ROUND(AVG(assists)) avgAssists, 
-            ROUND(AVG(deaths)) avgDeaths, 
-            ROUND(AVG(score)) avgScore, 
-            ROUND(AVG(mvp)) avgMvp, 
-            ROUND(AVG(hs)) avgHs, 
-            COUNT(*) gamesPlayed,
+  let { rows: topPlayers } = await db.query(
+    `
+    SELECT playerName "playerName", 
+            ROUND(AVG(kills))::INTEGER "avgKills", 
+            ROUND(AVG(assists))::INTEGER "avgAssists", 
+            ROUND(AVG(deaths))::INTEGER "avgDeaths", 
+            ROUND(AVG(score))::INTEGER "avgScore", 
+            ROUND(AVG(mvp))::INTEGER "avgMvp", 
+            ROUND(AVG(hs))::INTEGER "avgHs", 
+            COUNT(*) "gamesPlayed",
             (SELECT COUNT(*) FROM TeamMembers TM 
                 JOIN Teams ON Teams.teamID=TM.teamID
-                WHERE Teams.score = 16 AND
+                WHERE roundsWon = 16 AND
                 TeamMembers.playerName = TM.playerName
                 GROUP BY TM.playerName
-            ) wins
+            )::INTEGER "wins"
     FROM TeamMembers 
     GROUP BY playerName
     ORDER BY AVG(score) DESC, AVG(kills) DESC
     LIMIT 5
     `
-    )
-    .all()
-    .map((player) =>
-      player.wins
-        ? player
-        : {
-            ...player,
-            wins: 0,
-          }
-    );
+  );
+  topPlayers = topPlayers.map((player) =>
+    player.wins
+      ? player
+      : {
+          ...player,
+          wins: 0,
+        }
+  );
 
   return { recentMatch, topPlayers };
 };
@@ -75,29 +87,29 @@ const getOverview = (db) => {
  * @param {*} startDate date to start searching from. Defaults to 0 (BEGINNING OF TIME)
  * @param {*} endDate date to search until. Defaults to the current date
  */
-const getMatches = (db, startDate, endDate) => {
+const getMatches = async (db, startDate, endDate) => {
   const matches = [];
-  const matchesRows = db
-    .prepare(
-      `
+  const { rows: matchesRows } = await db.query(
+    `
     SELECT * FROM Matches
     JOIN Teams USING (matchID)
-    WHERE datePlayed BETWEEN ? AND ?
+    WHERE datePlayed BETWEEN $1 AND $2
     ORDER BY datePlayed DESC
     LIMIT 10
-  `
-    )
-    .all(startDate, endDate);
+  `,
+    [startDate, endDate]
+  );
+
   for (let i = 0; i < matchesRows.length; i += 2) {
     const teams = matchesRows.slice(i, i + 2);
 
     matches.push({
-      datePlayed: teams[0].datePlayed,
+      datePlayed: parseInt(teams[0].dateplayed),
       map: teams[0].map,
       duration: teams[0].duration,
-      matchID: teams[0].matchID,
-      score: [teams[0].score, teams[1].score],
-      teamIDs: [teams[0].teamID, teams[1].teamID],
+      matchID: teams[0].matchid,
+      score: [teams[0].roundswon, teams[1].roundswon],
+      teamIDs: [teams[0].teamid, teams[1].teamid],
     });
   }
 
@@ -109,27 +121,33 @@ const getMatches = (db, startDate, endDate) => {
  * @param {*} db
  * @param {*} datePlayed
  */
-const getMatch = (db, datePlayed) => {
-  const match = db
-    .prepare(
-      `
+const getMatch = async (db, datePlayed) => {
+  const { rows } = await db.query(
+    `
     SELECT *,
-      Teams.score roundsWon,
-      AVG(kills) avgKills, 
-      AVG(assists) avgAssists, 
-      AVG(deaths) avgDeaths, 
-      AVG(TeamMembers.score) avgScore, 
-      AVG(hs) avgHs, 
-      AVG(mvp) avgMvp
-    
+      roundsWon "roundsWon",
+      ROUND(AVG(kills))::INTEGER "avgKills", 
+      ROUND(AVG(assists))::INTEGER "avgAssists", 
+      ROUND(AVG(deaths))::INTEGER "avgDeaths", 
+      ROUND(AVG(score))::INTEGER "avgScore", 
+      ROUND(AVG(hs))::INTEGER "avgHs", 
+      ROUND(AVG(mvp))::INTEGER "avgMvp"
     FROM Matches
     JOIN Teams USING (matchID)
     JOIN TeamMembers USING (teamID)
-    WHERE datePlayed = ?
-    GROUP BY playerName
-  `
-    )
-    .all(datePlayed);
+    WHERE datePlayed = $1
+    GROUP BY playerName, Teams.teamID, Teams.roundsWon, Matches.matchID, ping, kills,
+    assists,
+    username,
+    deaths,
+    score,
+    hs,
+    mvp
+  `,
+    [datePlayed]
+  );
+
+  const match = rows[0];
 
   return { match };
 };
@@ -138,38 +156,37 @@ const getMatch = (db, datePlayed) => {
  * Returns basic stats for all players
  * @param {*} db
  */
-const getPlayers = (db) => {
-  const playersStats = db
-    .prepare(
-      `
-  SELECT  playerName,
-          ROUND(AVG(kills)) avgKills, 
-          ROUND(AVG(assists)) avgAssists, 
-          ROUND(AVG(deaths)) avgDeaths, 
-          ROUND(AVG(score)) avgScore, 
-          ROUND(AVG(hs)) avgHs, 
-          ROUND(AVG(mvp)) avgMvp, 
+const getPlayers = async (db) => {
+  let { rows: playersStats } = await db.query(
+    `
+  SELECT  playerName "playerName",
+          ROUND(AVG(kills))::INTEGER "avgKills", 
+          ROUND(AVG(assists))::INTEGER "avgAssists", 
+          ROUND(AVG(deaths))::INTEGER "avgDeaths", 
+          ROUND(AVG(score))::INTEGER "avgScore", 
+          ROUND(AVG(hs))::INTEGER "avgHs", 
+          ROUND(AVG(mvp))::INTEGER "avgMvp", 
 
-          COUNT(*) gamesPlayed,
+          COUNT(*)::INTEGER "gamesPlayed",
           (SELECT COUNT(*) FROM TeamMembers TM 
               JOIN Teams ON Teams.teamID = TM.teamID
-              WHERE Teams.score = 16 AND
+              WHERE roundsWon = 16 AND
               TeamMembers.playerName = TM.playerName
               GROUP BY TM.playerName
-          ) wins
+          )::INTEGER "wins"
   FROM TeamMembers
   GROUP BY playerName
   `
-    )
-    .all()
-    .map((player) => {
-      return player.wins
-        ? player
-        : {
-            ...player,
-            wins: 0,
-          };
-    });
+  );
+
+  playersStats = playersStats.map((player) => {
+    return player.wins
+      ? player
+      : {
+          ...player,
+          wins: 0,
+        };
+  });
 
   return playersStats;
 };
@@ -179,49 +196,49 @@ const getPlayers = (db) => {
  * @param {*} db
  * @param {*} playerName
  */
-const getPlayer = (db, playerName) => {
-  const playerStats = db
-    .prepare(
-      `
-  SELECT  playerName,
-         ROUND(AVG(kills)) avgKills, 
-         ROUND(AVG(assists)) avgAssists, 
-         ROUND(AVG(deaths)) avgDeaths, 
-         ROUND(AVG(score)) avgScore, 
-         ROUND(AVG(hs)) avgHs, 
-         ROUND(AVG(mvp)) avgMvp, 
+const getPlayer = async (db, playerName) => {
+  const { rows } = await db.query(
+    `
+  SELECT  playerName "playerName",
+         ROUND(AVG(kills))::INTEGER "avgKills", 
+         ROUND(AVG(assists))::INTEGER "avgAssists", 
+         ROUND(AVG(deaths))::INTEGER "avgDeaths", 
+         ROUND(AVG(score))::INTEGER "avgScore", 
+         ROUND(AVG(hs))::INTEGER "avgHs", 
+         ROUND(AVG(mvp))::INTEGER "avgMvp", 
 
-          MAX(kills) maxKills, 
-          MAX(assists) maxAssists, 
-          MAX(mvp) maxMvp, 
-          MAX(score) maxScore, 
+          MAX(kills)::INTEGER "maxKills", 
+          MAX(assists)::INTEGER "maxAssists", 
+          MAX(mvp)::INTEGER "maxMvp", 
+          MAX(score)::INTEGER "maxScore", 
 
-          COUNT(*) gamesPlayed,
+          COUNT(*)::INTEGER "gamesPlayed",
           (SELECT COUNT(*) FROM TeamMembers TM 
               JOIN Teams ON Teams.teamID = TM.teamID
-              WHERE Teams.score = 16 AND
+              WHERE roundsWon = 16 AND
               TeamMembers.playerName = TM.playerName
               GROUP BY TM.playerName
-          ) wins
+          )::INTEGER "wins"
   FROM TeamMembers 
-  WHERE playerName = ?
-  `
-    )
-    .get(playerName);
+  WHERE playerName = $1
+  GROUP BY playername
+  `,
+    [playerName]
+  );
+  const playerStats = rows[0];
   if (!playerStats.wins) playerStats.wins = 0;
 
-  const recentGames = db
-    .prepare(
-      `
+  const { rows: recentGames } = await db.query(
+    `
       SELECT * FROM TeamMembers
       JOIN Teams USING (teamID)
       JOIN Matches USING (matchID)
-      WHERE playerName = ?
+      WHERE playerName = $1
       ORDER BY datePlayed DESC
       LIMIT 5
-  `
-    )
-    .all(playerName);
+  `,
+    [playerName]
+  );
 
   return { playerStats, recentGames };
 };

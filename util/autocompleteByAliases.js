@@ -1,23 +1,26 @@
-const autocompleteByAliases = (db, gameData) => {
+const autocompleteByAliases = async (db, gameData) => {
   const { teams } = gameData;
-  const stmt = db.prepare(`
+  const sql = `
   SELECT playerName 
   FROM TeamMembers
   JOIN Teams USING (teamID)
   JOIN Matches USING (matchID)
-  WHERE username=? 
+  WHERE username = $1 
   ORDER BY datePlayed DESC 
-  `);
+  `;
 
-  teams.forEach((team, teamIx) => {
-    team.forEach((member, memberIx) => {
-      const row = stmt.get(member.username);
-      Object.assign(gameData.teams[teamIx][memberIx], {
-        playerName: row ? row.playerName : null,
-      });
-    });
-  });
-
+  await Promise.all(
+    teams.map(async (team, teamIx) => {
+      await Promise.all(
+        team.map(async (member, memberIx) => {
+          const { rows } = await db.query(sql, [member.username]);
+          Object.assign(gameData.teams[teamIx][memberIx], {
+            playerName: rows.length ? rows[0].playername : null,
+          });
+        })
+      );
+    })
+  );
   return gameData;
 };
 

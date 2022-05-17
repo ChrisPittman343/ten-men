@@ -1,9 +1,11 @@
 <script lang="ts">
   import axios from "axios";
   import { onMount } from "svelte";
+  import { navigate } from "svelte-routing";
   import StandalonePlayer from "../components/players/StandalonePlayer.svelte";
   import BackToTop from "../components/popup/BackToTop.svelte";
   import SortHead from "../components/sort/SortHead.svelte";
+  import { addServerErrorNotification } from "../util/addNotification";
   import { getWinrate } from "../util/getWinrate";
 
   let players: Player[] = [];
@@ -19,7 +21,10 @@
       .then((res) => {
         players = res.data;
       })
-      .catch(console.log);
+      .catch((err) => {
+        addServerErrorNotification();
+        navigate("/error");
+      });
   });
 
   $: {
@@ -83,6 +88,8 @@
       {#if i !== computedPlayers.length - 1}
         <tr class="border px-8 border-secondary/5" />
       {/if}
+    {:else}
+      <h2>No players found.</h2>
     {/each}
   </table>
 </div>

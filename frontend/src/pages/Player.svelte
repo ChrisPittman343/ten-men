@@ -1,7 +1,9 @@
 <script lang="ts">
   import axios from "axios";
   import { onMount } from "svelte";
+  import { navigate } from "svelte-routing";
   import Construction from "../components/Construction.svelte";
+  import { addServerErrorNotification } from "../util/addNotification";
 
   export let playerName: string;
   let player;
@@ -11,9 +13,11 @@
       .get(`/api/player/${playerName}`)
       .then((res) => {
         player = res.data;
-        console.log(res.data);
       })
-      .catch(console.log);
+      .catch((err) => {
+        addServerErrorNotification();
+        navigate("/error");
+      });
   });
 </script>
 

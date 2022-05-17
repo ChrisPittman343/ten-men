@@ -4,6 +4,10 @@
   import { navigate } from "svelte-routing";
   import BasicMatch from "../components/match/basic/BasicMatch.svelte";
   import TopPlayerCard from "../components/players/TopPlayerCard.svelte";
+  import {
+    addNotification,
+    addServerErrorNotification,
+  } from "../util/addNotification";
 
   let overviewData: OverviewData;
 
@@ -14,6 +18,7 @@
         overviewData = res.data;
       })
       .catch((err) => {
+        addServerErrorNotification();
         navigate("/error");
       });
   });
@@ -23,9 +28,9 @@
   <title>Home | 10M</title>
 </svelte:head>
 
-{#if overviewData}
-  <div class="flex justify-center max-w-7xl m-auto py-12">
-    <div id="top-players" class="flex flex-col justify-between gap-y-8 h-min">
+{#if overviewData?.topPlayers?.length}
+  <div class="flex justify-center max-w-7xl m-auto py-4">
+    <div id="top-players" class="flex flex-col justify-between gap-y-6 h-min">
       <header>
         <h1 class="text-3xl font-bold">Top Overall Players</h1>
       </header>
@@ -33,9 +38,9 @@
         <TopPlayerCard {player} {index} />
       {/each}
     </div>
-    <div class="w-0.5 m-12" />
+    <div class="w-0.5 m-6 xl:m-12" />
     <div id="recent-match" class="">
-      <header class="pb-8">
+      <header class="pb-6">
         <h1 class="text-3xl font-bold">Most Recent Match</h1>
       </header>
       <BasicMatch match={overviewData.recentMatch} />

@@ -6,3 +6,10 @@ export const addNotification = (notification: ToastNotification) => {
     return val;
   });
 };
+
+export const addServerErrorNotification = () => {
+  addNotification({
+    type: "failure",
+    message: "Something went boom on the server.",
+  });
+};

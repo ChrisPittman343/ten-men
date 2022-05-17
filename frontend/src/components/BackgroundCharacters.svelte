@@ -14,7 +14,7 @@
 
   const lookAround = (e: MouseEvent) => {
     const yTurnRate = 80;
-    const xTurnRate = 120;
+    const xTurnRate = 650;
 
     leftImg.style.transform = `rotateY(${-e.screenX / yTurnRate}deg) `;
     rightImg.style.transform = `rotateY(${e.screenX / yTurnRate}deg) `;

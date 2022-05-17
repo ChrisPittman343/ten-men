@@ -13,8 +13,8 @@ const parseGame = (text) => {
 };
 
 const getMetaData = (text) => {
-  // todo: in some games, there is no replay... I.e. no button.
-
+  // In some games, there is no replay... I.e. no button.
+  // In that case, start from the table head of the scoreboard
   const endIx =
     /Download\s+GOTV\s+Replay/.exec(text)?.index ||
     /Player\s+Name\s+Ping\s+K\s+A\s+D\s+★\s+HSP\s+Score/.exec(text).index;

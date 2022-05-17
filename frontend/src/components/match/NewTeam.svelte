@@ -10,7 +10,7 @@
 <table class="relative block pl-16 w-full pb-8">
   <RoundsWon count={roundsWon} />
   <tr>
-    <th>Player Name</th>
+    <th>Name</th>
     <th>K</th>
     <th>A</th>
     <th>D</th>

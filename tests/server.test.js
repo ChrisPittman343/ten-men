@@ -34,5 +34,5 @@ test("Recognizes a NON-admin session", async () => {
 });
 
 afterAll(() => {
-  app.close();
+  // todo: close app
 });

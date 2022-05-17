@@ -8,7 +8,7 @@
   $: teams = [match.players.slice(0, 5), match.players.slice(5)];
 </script>
 
-<div class="min-w-[700px] backdrop-blur-md">
+<div class="min-w-[200px] xl:min-w-[700px] backdrop-blur-md">
   <BasicMatchBanner {match} />
   <div class="h-4" />
   <div class="relative">
@@ -16,7 +16,7 @@
       <RoundsWon count={team[0].roundsWon} />
       <table class="relative block pl-16 w-full">
         <tr>
-          <th>Player Name</th>
+          <th>Name</th>
           <th>K</th>
           <th>A</th>
           <th>D</th>
@@ -30,7 +30,7 @@
             <tr class="border px-8 border-secondary/5" />
           {/if}
         {/each}
-        <div class="h-8" />
+        <div class="h-4" />
       </table>
     {/each}
   </div>
@@ -38,6 +38,12 @@
 
 <style lang="postcss">
   th {
-    @apply font-medium text-left pr-12 py-2 w-full;
+    @apply font-medium text-left pr-9 py-1 w-full;
+  }
+
+  @media screen(xl) {
+    th {
+      @apply pr-12;
+    }
   }
 </style>

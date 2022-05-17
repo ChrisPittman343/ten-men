@@ -22,10 +22,12 @@
     rawData = await navigator.clipboard.readText();
     axios
       .post("/api/verifyData", { gameData: rawData })
-      .then((res) => (parsedData = res.data))
+      .then((res) => {
+        parsedData = res.data;
+      })
       .then(() => (step1Error = ""))
       .catch((err) => {
-        step1Error = err.response.data.message;
+        step1Error = err.response?.data.message || "Something went wrong.";
       });
   };
 

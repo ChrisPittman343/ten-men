@@ -17,7 +17,7 @@
       {index + 1}. <span class=""> {player.playerName}</span>
     </span>
 
-    <div class="flex items-center w-40 h-1">
+    <div class="flex items-center w-32 xl:w-40 h-1">
       <span class="text-xs pr-2 text-secondary/50">
         {wr * 100}%&nbsp;WR
       </span>
@@ -28,18 +28,18 @@
   </div>
   <table>
     <tr>
+      <th>Score</th>
       <th>W/L</th>
       <th class="bigger">K/A/D</th>
-      <th>Score</th>
       <th>HS</th>
       <th>MVP</th>
     </tr>
     <tr>
+      <td>{player.avgScore}</td>
       <td>{player.wins}/{player.gamesPlayed - player.wins}</td>
       <td class="bigger">
         {player.avgKills}/{player.avgAssists}/{player.avgDeaths}
       </td>
-      <td>{player.avgScore}</td>
       <td>{player.avgHs}%</td>
       <td>{player.avgMvp}</td>
     </tr>
@@ -49,7 +49,7 @@
 <style lang="postcss">
   th,
   td {
-    min-width: 54px;
+    min-width: 44px;
     @apply text-left p-0 text-xs;
   }
 
@@ -63,5 +63,12 @@
 
   td {
     @apply text-secondary/50;
+  }
+
+  @media screen(xl) {
+    th,
+    td {
+      min-width: 54px;
+    }
   }
 </style>

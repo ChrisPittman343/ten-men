@@ -27,6 +27,12 @@
 
 <style lang="postcss">
   td {
-    @apply py-2;
+    @apply text-sm py-1.5;
+  }
+
+  @media screen(xl) {
+    td {
+      @apply py-2 text-base;
+    }
   }
 </style>

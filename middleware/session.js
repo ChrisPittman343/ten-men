@@ -1,15 +1,14 @@
 const session = require("express-session");
 const config = require("../config");
-const SqliteStore = require("better-sqlite3-session-store")(session);
-const sessionsDB = require("better-sqlite3")("./database/sessions.db");
+const db = require("../database/db");
+const PostgresSession = require("connect-pg-simple")(session);
 
 module.exports = session({
-  store: new SqliteStore({
-    client: sessionsDB,
-    expired: {
-      clear: true,
-      intervalMs: 900000, //ms = 15min
-    },
+  store: new PostgresSession({
+    pool: db,
+    schemaName: "public",
+    tableName: "session",
+    createTableIfMissing: true,
   }),
   secret: config.secret,
   resave: false,

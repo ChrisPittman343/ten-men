@@ -8,7 +8,7 @@
   onMount(() => {
     const timeout = setTimeout(() => {
       toast.remove();
-    }, 2500);
+    }, 3000);
 
     return () => {
       if (timeout) clearTimeout(timeout);

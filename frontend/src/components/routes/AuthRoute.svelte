@@ -15,8 +15,6 @@
   });
 
   const checkAuth = (authState: AuthState) => {
-    console.log("CHECK");
-
     if (!authState.isAdmin && !authState.isLoading) {
       addNotification({
         type: "failure",
