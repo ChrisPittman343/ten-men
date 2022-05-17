@@ -13,6 +13,7 @@ module.exports = session({
   secret: config.secret,
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   cookie: {
     sameSite: "none",
     httpOnly: true,
