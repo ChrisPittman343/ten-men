@@ -8,7 +8,7 @@
 
 ## Overview
 
-Ten Men, or 10M for short, is a web app created for my friends to log our unofficial CS:GO 10 man matches, which aren't available in Counter Strike: Global Offensive's (CS:GO) standard match history.
+Ten Men, or 10M for short, is a web app created for my friends to log our unofficial Counter Strike: Global Offensive (CS:GO) 10 man matches, which aren't available in CS:GO's standard match history.
 
 It is built with Express and Postgres on the backend, serving a pre-compiled Svelte project. It is hosted on Heroku.
 
