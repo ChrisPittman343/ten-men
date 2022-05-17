@@ -1,6 +1,6 @@
 <p align="center">
 <img width="150px" src="https://ten-men.herokuapp.com/favicon.png" />
-<h2 align="center"> Ten Men </h2>
+<h3 align="center"> Ten Men </h3>
 <p align="center">
  CS:GO 10 Man Stat Tracking (for the boys)
  </p>
