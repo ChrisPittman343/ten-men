@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "cd frontend && npm run build && cd ../ && node server.js",
+    "start": "cd frontend && npm install && npm run build && cd ../ && node server.js",
     "nodemon": "nodemon server.js",
     "heroku-local": "heroku local web",
     "test": "jest --detectOpenHandles"
