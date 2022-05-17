@@ -5,7 +5,11 @@ const db = new Pool({
   connectionString: config.dev
     ? config.localConnection
     : config.postgresConnection,
-  ssl: config.dev ? false : undefined,
+  ssl: config.dev
+    ? false
+    : {
+        rejectUnauthorized: false,
+      },
   max: 2,
 });
 
