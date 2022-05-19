@@ -10,15 +10,15 @@
 <a
   href={`/players/${player.playerName}`}
   use:link
-  class="border-2 border-primary px-4 py-2 transition-colors hover:bg-primary rounded-md backdrop-blur-sm"
+  class="border-2 border-primary px-4 py-1.5 transition-colors hover:bg-primary rounded-md backdrop-blur-sm text-xs"
 >
   <div class="flex justify-between items-center gap-2 pb-2">
-    <span class="font-medium text-lg whitespace-nowrap">
+    <span class="font-medium text-sm xl:text-base whitespace-nowrap">
       {index + 1}. <span class=""> {player.playerName}</span>
     </span>
 
     <div class="flex items-center w-32 xl:w-40 h-1">
-      <span class="text-xs pr-2 text-secondary/50">
+      <span class="pr-2 text-secondary/50">
         {wr * 100}%&nbsp;WR
       </span>
       <div class="bg-green h-full" style={`width: ${wr * 100}%;`} />
@@ -50,11 +50,12 @@
   th,
   td {
     min-width: 44px;
-    @apply text-left p-0 text-xs;
+    font-size: 10px;
+    @apply text-left p-0;
   }
 
   .bigger {
-    min-width: 72px;
+    min-width: 62px;
   }
 
   th {
@@ -69,6 +70,11 @@
     th,
     td {
       min-width: 54px;
+      @apply text-xs;
+    }
+
+    .bigger {
+      min-width: 72px;
     }
   }
 </style>

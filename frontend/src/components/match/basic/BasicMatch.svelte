@@ -38,7 +38,7 @@
 
 <style lang="postcss">
   th {
-    @apply font-medium text-left pr-9 py-1 w-full;
+    @apply font-medium text-left pr-7 py-1 w-full;
   }
 
   @media screen(xl) {

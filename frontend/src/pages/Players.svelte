@@ -65,21 +65,21 @@
       id=""
       bind:value={searchBar}
       placeholder="🔎 Search by name"
-      class="text-xl max-w-md accent-primary"
+      class="text-lg max-w-md accent-primary"
     />
   </header>
   <table class="backdrop-blur-md w-full">
     <tr>
       <SortHead bind:sortKey bind:dir key="playerName">Name</SortHead>
-      <SortHead bind:sortKey bind:dir key="winrate">Winrate</SortHead>
+      <SortHead bind:sortKey bind:dir key="winrate">WR</SortHead>
       <th />
       <SortHead bind:sortKey bind:dir key="gamesPlayed">W/L</SortHead>
       <SortHead bind:sortKey bind:dir key="avgKills">K</SortHead>
       <SortHead bind:sortKey bind:dir key="avgAssists">A</SortHead>
       <SortHead bind:sortKey bind:dir key="avgDeaths">D</SortHead>
-      <SortHead bind:sortKey bind:dir key="avgHs">Headshots</SortHead>
-      <SortHead bind:sortKey bind:dir key="avgScore">Score</SortHead>
+      <SortHead bind:sortKey bind:dir key="avgHs">HS</SortHead>
       <SortHead bind:sortKey bind:dir key="avgMvp">MVP</SortHead>
+      <SortHead bind:sortKey bind:dir key="avgScore">Score</SortHead>
     </tr>
 
     <!-- Need the key for playerName when sorting, otherwise winrate won't update the list  -->

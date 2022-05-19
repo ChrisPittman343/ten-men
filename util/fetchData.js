@@ -25,7 +25,7 @@ const getOverview = async (db) => {
     FROM Matches 
     INNER JOIN Teams USING (matchID)
     INNER JOIN TeamMembers USING (teamID)
-    GROUP BY TeamMembers.teamID, playerName, Matches.matchID, Matches.datePlayed, Matches.map, Matches.duration, Teams.matchID, Teams.teamID
+    GROUP BY playerName, TeamMembers.teamID,  Matches.matchID, Matches.datePlayed, Matches.map, Matches.duration, Teams.matchID, Teams.teamID
     ORDER BY datePlayed DESC, TeamMembers.teamID DESC, TeamMembers.score DESC
     LIMIT 10
     `
@@ -124,32 +124,35 @@ const getMatches = async (db, startDate, endDate) => {
 const getMatch = async (db, datePlayed) => {
   const { rows } = await db.query(
     `
-    SELECT *,
-      roundsWon "roundsWon",
-      ROUND(AVG(kills))::INTEGER "avgKills", 
-      ROUND(AVG(assists))::INTEGER "avgAssists", 
-      ROUND(AVG(deaths))::INTEGER "avgDeaths", 
-      ROUND(AVG(score))::INTEGER "avgScore", 
-      ROUND(AVG(hs))::INTEGER "avgHs", 
-      ROUND(AVG(mvp))::INTEGER "avgMvp"
-    FROM Matches
-    JOIN Teams USING (matchID)
-    JOIN TeamMembers USING (teamID)
-    WHERE datePlayed = $1
-    GROUP BY playerName, Teams.teamID, Teams.roundsWon, Matches.matchID, ping, kills,
-    assists,
+
+    SELECT  TeamMembers.playername "playerName", 
     username,
+    ping,
+    kills,
+    assists,
     deaths,
-    score,
     hs,
-    mvp
+    mvp,
+    score,
+    Teams.teamID "teamID", 
+    roundsWon "roundsWon", 
+    Matches.matchID "matchID", 
+    map, 
+    duration, 
+    datePlayed "datePlayed" 
+    FROM Matches 
+    INNER JOIN Teams USING (matchID)
+    INNER JOIN TeamMembers USING (teamID)
+    WHERE datePlayed = $1
+    GROUP BY playerName, TeamMembers.teamID,  Matches.matchID, Matches.datePlayed, Matches.map, Matches.duration, Teams.matchID, Teams.teamID
+    ORDER BY datePlayed DESC, TeamMembers.teamID DESC, TeamMembers.score DESC
+    LIMIT 10
   `,
     [datePlayed]
   );
 
   const match = rows[0];
-
-  return { match };
+  return match;
 };
 
 /**

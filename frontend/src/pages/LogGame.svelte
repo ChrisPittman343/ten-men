@@ -79,8 +79,7 @@
           >
             scrimmage history <Icon data={ext} />
           </a>
-          and copy the game's data by selecting from the map's image to the bottom
-          rightmost score.
+          and copy the game's scoreboard.
           <span
             on:mouseenter={() => (showInfo = true)}
             on:mouseleave={() => (showInfo = false)}

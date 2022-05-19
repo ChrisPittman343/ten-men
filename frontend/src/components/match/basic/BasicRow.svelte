@@ -32,7 +32,7 @@
 
   @media screen(xl) {
     td {
-      @apply py-2 text-base;
+      @apply py-1.5 text-sm;
     }
   }
 </style>

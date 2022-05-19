@@ -12,12 +12,12 @@
   style={`background-image: url('${bannerURL}');`}
 >
   <div
-    class="min-w-[300px] w-full px-6 py-2 from-tertiary-dark via-tertiary-dark/80 to-transparent bg-gradient-to-r"
+    class="min-w-[300px] w-full px-6 py-2 from-tertiary-dark via-tertiary-dark/80 to-transparent bg-gradient-to-r text-xs xl:text-sm"
   >
-    <h1 class="text-3xl font-medium pb-1">
+    <h1 class="text-xl xl:text-2xl font-medium pb-1">
       {match.map}
     </h1>
-    <h2 class="text-secondary/60 text-sm">
+    <h2 class="text-secondary/60 ">
       {new Date(match.datePlayed).toDateString() +
         ", " +
         new Date(match.datePlayed).toLocaleTimeString()}
@@ -25,7 +25,7 @@
     {#if logged}
       <a
         href={`/matches/${match.datePlayed}`}
-        class="text-secondary/60 underline text-sm"
+        class="text-secondary/60 underline"
         use:link>Advanced details</a
       >
     {/if}

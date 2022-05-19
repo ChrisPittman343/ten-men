@@ -12,7 +12,7 @@
 
 <div class="flex flex-col justify-center items-center gap-y-16 min-h-[80vh]">
   <header class="text-center">
-    <h1 class="text-8xl font-bold pb-2">Admin Tools</h1>
+    <h1 class="text-7xl font-bold pb-2">Admin Tools</h1>
     <p class="text-secondary/50 backdrop-blur-md">
       Please be an upstanding lad and use your power for good.
       <br />
@@ -48,7 +48,7 @@
 
 <style lang="postcss">
   .card {
-    @apply px-8 py-5 w-[350px] transition-all rounded-md backdrop-blur-md;
+    @apply px-6 py-4 w-[325px] transition-all rounded-md backdrop-blur-md;
   }
 
   .card:hover {
@@ -60,10 +60,9 @@
   }
 
   .card h2 {
-    @apply text-3xl font-medium;
+    @apply text-2xl font-medium;
   }
 
   .card p {
-    @apply text-lg;
   }
 </style>

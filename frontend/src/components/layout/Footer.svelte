@@ -1,5 +1,5 @@
-<footer class="bg-tertiary-dark p-6 flex flex-col items-center gap-4">
-  <div>Created for (and only for) the Boys.</div>
+<footer class="bg-tertiary-dark p-6 flex flex-col items-center gap-3 text-xs">
+  <div class="text-sm">Created for (and only for) the Boys.</div>
   <div id="bottom" class="flex gap-x-8">
     <a
       href="https://github.com/ChrisPittman343/ten-men"
@@ -20,6 +20,6 @@
 
 <style lang="postcss">
   #bottom {
-    @apply text-secondary/50 text-sm;
+    @apply text-secondary/50;
   }
 </style>

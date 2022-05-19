@@ -29,19 +29,18 @@
 </svelte:head>
 
 {#if overviewData?.topPlayers?.length}
-  <div class="flex justify-center max-w-7xl m-auto py-4">
-    <div id="top-players" class="flex flex-col justify-between gap-y-6 h-min">
+  <div class="flex justify-center max-w-7xl m-auto py-4 gap-12">
+    <div id="top-players" class="flex flex-col justify-between gap-y-5 h-min">
       <header>
-        <h1 class="text-3xl font-bold">Top Overall Players</h1>
+        <h1 class="text-2xl font-bold">Top Players</h1>
       </header>
       {#each overviewData.topPlayers as player, index}
         <TopPlayerCard {player} {index} />
       {/each}
     </div>
-    <div class="w-0.5 m-6 xl:m-12" />
     <div id="recent-match" class="">
       <header class="pb-6">
-        <h1 class="text-3xl font-bold">Most Recent Match</h1>
+        <h1 class="text-2xl font-bold">Most Recent Match</h1>
       </header>
       <BasicMatch match={overviewData.recentMatch} />
     </div>

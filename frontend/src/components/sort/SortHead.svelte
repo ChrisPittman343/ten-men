@@ -17,7 +17,7 @@
 
 <th
   on:click={sortByKey}
-  class="cursor-pointer hover:underline text-left pr-6 pb-2 select-none"
+  class="cursor-pointer hover:underline text-left pr-4 xl:pr-6 pb-2 select-none"
 >
   <slot />
   <SortArrow shown={sortKey === key} down={dir === "DESC"} />

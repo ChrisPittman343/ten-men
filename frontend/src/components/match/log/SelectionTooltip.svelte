@@ -7,5 +7,5 @@
     Select from the map image to the bottom rightmost score, like so:
   </h3>
   <br />
-  <img src="/images/sample_selected.png" alt="" loading="lazy" />
+  <img src="/images/sample_selected.png" alt=""  />
 </div>

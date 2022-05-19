@@ -12,7 +12,7 @@
   });
 
   const shouldShowButton = () => {
-    showing = window.scrollY > 150;
+    showing = window.scrollY > 200;
   };
 
   let showing = false;
