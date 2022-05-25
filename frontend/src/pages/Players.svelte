@@ -11,7 +11,7 @@
   let players: Player[] = [];
   let computedPlayers: Player[] = [];
   let searchBar = "";
-  let sortKey = "playerName";
+  let sortKey = "winrate";
   let dir: SortDirection = "ASC";
   $: directionMultiplier = dir === "ASC" ? 1 : -1;
 
