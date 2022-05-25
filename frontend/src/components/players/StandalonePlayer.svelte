@@ -8,14 +8,14 @@
 
 <tr
   on:click={() => navigate(`/players/${player.playerName}`)}
-  class="items-center cursor-pointer group hover:bg-tertiary-dark transition-colors text-sm xl:text-base"
+  class="hover:bg-secondary/5 group cursor-pointer items-center text-sm transition-colors"
 >
-  <td class="group-hover:underline font-medium">{player.playerName}</td>
+  <td class="font-medium group-hover:underline">{player.playerName}</td>
   <td class="tiny">{wr * 100}%</td>
 
   <!-- Bar container needs extra y-padding so it can be centered with text -->
   <td
-    class="flex justify-center items-center w-32 xl:w-40 h-full py-4 xl:py-5 tiny mr-2"
+    class="tiny mr-2 flex h-full w-32 items-center justify-center py-4 xl:w-40 xl:py-5"
   >
     <div class="bg-green bar" style={`width: ${wr * 100}%;`} />
     <div class="bg-secondary bar" />
@@ -32,7 +32,7 @@
 
 <style lang="postcss">
   td {
-    @apply pr-6 xl:pr-12 text-secondary/70 transition-colors group-hover:text-secondary;
+    @apply text-secondary/60 group-hover:text-secondary pr-6 transition-colors xl:pr-12;
   }
 
   .tiny {

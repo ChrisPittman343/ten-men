@@ -7,7 +7,7 @@
 </script>
 
 <button
-  class="px-6 py-0.5 font-medium bg-primary border border-primary hover:brightness-90 transition-all relative rounded"
+  class="bg-primary border-primary text-tertiary relative rounded border px-6 py-0.5 font-medium transition-all hover:brightness-90"
   {type}
   on:click
   class:disabled

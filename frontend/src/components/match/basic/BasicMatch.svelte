@@ -3,18 +3,18 @@
   import BasicMatchBanner from "./BasicMatchBanner.svelte";
   import BasicRow from "./BasicRow.svelte";
 
-  export let match: OverviewMatch;
+  export let match: any;
 
   $: teams = [match.players.slice(0, 5), match.players.slice(5)];
 </script>
 
-<div class="min-w-[200px] xl:min-w-[700px] backdrop-blur-md">
+<div class="backdrop-blur-md">
   <BasicMatchBanner {match} />
   <div class="h-4" />
   <div class="relative">
     {#each teams as team, teamIx}
       <RoundsWon count={team[0].roundsWon} />
-      <table class="relative block pl-16 w-full">
+      <table class="relative block w-full pl-16">
         <tr>
           <th>Name</th>
           <th>K</th>
@@ -27,7 +27,7 @@
         {#each team as player, ix}
           <BasicRow {player} />
           {#if ix != 4}
-            <tr class="border px-8 border-secondary/5" />
+            <tr class="border-secondary/5 border px-8" />
           {/if}
         {/each}
         <div class="h-4" />
@@ -38,7 +38,7 @@
 
 <style lang="postcss">
   th {
-    @apply font-medium text-left pr-7 py-1 w-full;
+    @apply w-full py-1 pr-7 text-left font-medium;
   }
 
   @media screen(xl) {

@@ -17,7 +17,8 @@
 
 <a
   {href}
-  class="text-secondary/50 hover:text-secondary transition-colors p-2 decoration-primary"
+  class="transition-colors px-6 py-2 border-l-[6px] text-lg border-transparent 
+        flex items-center gap-3 text-tertiary/50 fill-tertiary/50"
   class:active
   use:link
 >
@@ -26,6 +27,11 @@
 
 <style lang="postcss">
   .active {
-    @apply underline underline-offset-4 text-secondary;
+    @apply font-medium border-primary;
+  }
+
+  .active,
+  a:hover {
+    @apply text-tertiary fill-tertiary;
   }
 </style>

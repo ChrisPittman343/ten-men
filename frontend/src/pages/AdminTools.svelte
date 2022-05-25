@@ -10,17 +10,17 @@
   <title>Admin Tools | 10M</title>
 </svelte:head>
 
-<div class="flex flex-col justify-center items-center gap-y-16 min-h-[80vh]">
+<div class="flex min-h-[80vh] flex-col items-center justify-center gap-y-16">
   <header class="text-center">
-    <h1 class="text-7xl font-bold pb-2">Admin Tools</h1>
+    <h1 class="pb-2 text-7xl font-bold">Admin Tools</h1>
     <p class="text-secondary/50 backdrop-blur-md">
       Please be an upstanding lad and use your power for good.
       <br />
       Unless it's to mess with Noah, that's cool too.
     </p>
   </header>
-  <div class="max-w-4xl flex flex-wrap gap-8 justify-center">
-    <a href="/admin/tools/log" use:link class="card bg-primary">
+  <div class="flex max-w-4xl flex-wrap justify-center gap-8">
+    <a href="/admin/tools/log" use:link class="card bg-primary text-tertiary">
       <header>
         <h2>Log Match</h2>
         <Icon data={game} scale={2} />
@@ -28,7 +28,7 @@
       <p>Add a match to the database</p>
     </a>
 
-    <a href="/admin/tools/pfps" use:link class="card border-2 border-primary">
+    <a href="/admin/tools/pfps" use:link class="card border-primary border-2">
       <header>
         <h2>Add PFPs</h2>
         <Icon data={pfp} scale={2} />
@@ -36,7 +36,7 @@
       <p>Attach profile pictures to players</p>
     </a>
 
-    <a href="/admin/tools/delete" use:link class="card border-2 border-red">
+    <a href="/admin/tools/delete" use:link class="card border-red border-2">
       <header>
         <h2>Delete Match</h2>
         <Icon data={trash} scale={2} />
@@ -48,15 +48,15 @@
 
 <style lang="postcss">
   .card {
-    @apply px-6 py-4 w-[325px] transition-all rounded-md backdrop-blur-md;
+    @apply w-[325px] rounded-md px-6 py-4 backdrop-blur-md transition-all;
   }
 
   .card:hover {
-    @apply -translate-y-1 shadow-xl shadow-tertiary-dark;
+    @apply -translate-y-1 shadow-lg;
   }
 
   .card header {
-    @apply flex justify-between gap-4 items-center pb-4;
+    @apply flex items-center justify-between gap-4 pb-4;
   }
 
   .card h2 {

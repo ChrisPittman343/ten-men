@@ -56,19 +56,21 @@
   <title>Players | 10M</title>
 </svelte:head>
 
-<div class="max-w-5xl m-auto">
-  <header class="flex justify-between py-8 pb-12">
-    <h1 class="font-bold text-5xl">Players</h1>
+<div class="max-w-4xl">
+  <header
+    class="border-secondary mb-8 flex items-center justify-between border-b-2"
+  >
+    <h1 class="text-2xl font-bold">Players</h1>
     <input
       type="search"
       name=""
       id=""
       bind:value={searchBar}
       placeholder="🔎 Search by name"
-      class="text-lg max-w-md accent-primary"
+      class="bg-secondary/5 m-1 max-w-md border-none py-1 text-lg !shadow-none"
     />
   </header>
-  <table class="backdrop-blur-md w-full">
+  <table class="w-full backdrop-blur-md">
     <tr>
       <SortHead bind:sortKey bind:dir key="playerName">Name</SortHead>
       <SortHead bind:sortKey bind:dir key="winrate">WR</SortHead>
@@ -86,7 +88,7 @@
     {#each computedPlayers as player, i (player.playerName)}
       <StandalonePlayer {player} />
       {#if i !== computedPlayers.length - 1}
-        <tr class="border px-8 border-secondary/5" />
+        <tr class="border-secondary/5 border px-8" />
       {/if}
     {:else}
       <h2>No players found.</h2>

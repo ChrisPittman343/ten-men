@@ -2,11 +2,8 @@
   import { onMount } from "svelte";
   import { Router, Route } from "svelte-routing";
   import AuthRoute from "./components/routes/AuthRoute.svelte";
-  import BackgroundCharacters from "./components/BackgroundCharacters.svelte";
-  import Footer from "./components/layout/Footer.svelte";
   import Navbar from "./components/layout/Navbar.svelte";
   import Notifications from "./components/popup/Notifications.svelte";
-  import About from "./pages/About.svelte";
   import AdminTools from "./pages/AdminTools.svelte";
   import DeleteMatch from "./pages/DeleteMatch.svelte";
   import Error from "./pages/Error.svelte";
@@ -31,19 +28,15 @@
 </script>
 
 <Router>
-  <div class="relative min-h-screen xl:overflow-hidden">
-    <BackgroundCharacters />
+  <div class="relative min-h-screen xl:overflow-hidden flex">
     <Navbar />
 
-    <main class="p-4">
+    <main class="p-8 w-full">
       <Route path="/">
         <FadeRoute><Home /></FadeRoute>
       </Route>
       <Route path="/login">
         <FadeRoute><Login /></FadeRoute>
-      </Route>
-      <Route path="/about">
-        <FadeRoute><About /></FadeRoute>
       </Route>
       <Route path="/matches">
         <FadeRoute><Matches /></FadeRoute>
@@ -56,13 +49,14 @@
         <FadeRoute><Player playerName={params.playerName} /></FadeRoute>
       </Route>
       <Route path="/matches/:datePlayed" let:params>
-        <FadeRoute><Match datePlayed={params.datePlayed} /></FadeRoute>
+        <FadeRoute><Match datePlayed={parseInt(params.datePlayed)} /></FadeRoute
+        >
       </Route>
 
       <!-- AuthRoute must be inside the Route so it can check auth only when the user is
       on an auth page. Otherwise, the component is mounted at the start of the app and
       will check it regardless of where the user is.  -->
-      <Route path="/admin/tools">
+      <Route path="/admin">
         <AuthRoute>
           <FadeRoute><AdminTools /></FadeRoute>
         </AuthRoute>
@@ -88,8 +82,6 @@
 
     <Notifications />
   </div>
-
-  <Footer />
 </Router>
 
 <style lang="postcss" global>
@@ -102,12 +94,12 @@
   }
 
   input {
-    @apply outline-none bg-tertiary-dark/50 p-2 w-full border-b border-primary mt-1 shadow-primary backdrop-blur-md
+    @apply outline-none bg-transparent p-2 w-full border-b border-primary mt-1 shadow-primary backdrop-blur-md
             transition-all;
   }
 
   input:focus {
-    @apply shadow-input bg-tertiary-dark;
+    @apply shadow-input bg-secondary/5;
   }
 
   input.error {

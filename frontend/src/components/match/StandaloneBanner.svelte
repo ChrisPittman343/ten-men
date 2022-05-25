@@ -1,26 +1,36 @@
 <script lang="ts">
-  import { link } from "svelte-routing";
+  import { selectedMatch } from "../../stores/matchesState";
+  import { mapToIconSrc } from "../../util/mapToBanner";
 
-  import { mapToBannerSrc } from "../../util/mapToBanner";
   export let match: StandaloneMatch;
-  $: bannerURL = mapToBannerSrc(match.map);
+
+  $: iconSrc = mapToIconSrc(match.map);
 </script>
 
-<a
-  href={`/matches/${match.datePlayed}`}
-  class="w-full bg-cover bg-center bg-no-repeat group"
-  style={`background-image: url('${bannerURL}');`}
-  use:link
+<button
+  aria-label="Show scoreboard for match"
+  class="hover:bg-secondary/10 w-50  flex flex-col gap-1 border-2 border-transparent
+  px-2 py-1 text-left transition-colors"
+  class:active={match.datePlayed === $selectedMatch}
+  on:click
 >
-  <div
-    class="min-w-[300px] w-full flex gap-4 items-end px-8 py-4 transition-all group-hover:backdrop-brightness-75
-    from-tertiary-dark via-tertiary-dark/80 to-transparent bg-gradient-to-r"
-  >
-    <h2 class="text-3xl font-medium tracking-wide">
-      {match.map} &nbsp; {match.score.join(":")}
-    </h2>
-    <p class="text-secondary/70">
-      {new Date(match.datePlayed).toDateString()}
-    </p>
+  <div class="flex h-full items-center gap-4">
+    <img src={iconSrc} alt="" class="aspect-square w-12" />
+    <div class="text-4xl font-medium">
+      {match.score.join(" : ")}
+    </div>
   </div>
-</a>
+  <div class="flex h-full gap-3 pl-2 text-xs opacity-60">
+    <span>{match.map}</span>
+    <span> • </span>
+    <span>
+      {new Date(match.datePlayed).toDateString()}
+    </span>
+  </div>
+</button>
+
+<style lang="postcss">
+  .active {
+    @apply bg-primary text-tertiary;
+  }
+</style>

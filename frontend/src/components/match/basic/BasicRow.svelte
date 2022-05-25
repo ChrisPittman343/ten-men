@@ -6,7 +6,7 @@
 
 <tr
   on:click={() => navigate(`/players/${player.playerName}`)}
-  class="w-full text-left hover:bg-tertiary-dark text-secondary/60 hover:text-secondary transition-colors cursor-pointer group"
+  class="hover:bg-secondary/5 text-secondary/70 hover:text-secondary group w-full cursor-pointer text-left transition-colors"
 >
   <td>
     <a
@@ -27,7 +27,7 @@
 
 <style lang="postcss">
   td {
-    @apply text-sm py-1.5;
+    @apply py-1.5 text-sm;
   }
 
   @media screen(xl) {

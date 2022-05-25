@@ -12,6 +12,8 @@
     axios
       .get(`/api/player/${playerName}`)
       .then((res) => {
+        console.log(res.data);
+
         player = res.data;
       })
       .catch((err) => {

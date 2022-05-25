@@ -12,6 +12,7 @@ const {
   getMatches,
   getPlayers,
 } = require("../util/fetchData");
+const deleteMatch = require("../util/deleteMatch");
 
 const router = express.Router();
 
@@ -127,6 +128,20 @@ router.post("/api/logGame", async (req, res) => {
     res.boom.badData(
       "Couldn't log game. Make sure all IGNs are assigned a unique player."
     );
+  }
+});
+
+// Auth required
+router.post("/api/deleteGame/:datePlayed", async (req, res) => {
+  try {
+    if (!req.session.admin) return res.boom.unauthorized();
+    const { datePlayed } = req.body;
+    const didDelete = await deleteMatch(db, datePlayed);
+    if (!didDelete) throw Error();
+
+    res.status(200).send();
+  } catch (error) {
+    res.boom.badData("Couldn't delete game.");
   }
 });
 

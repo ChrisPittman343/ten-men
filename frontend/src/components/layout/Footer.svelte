@@ -1,25 +1,13 @@
-<footer class="bg-tertiary-dark p-6 flex flex-col items-center gap-3 text-xs">
-  <div class="text-sm">Created for (and only for) the Boys.</div>
-  <div id="bottom" class="flex gap-x-8">
-    <a
-      href="https://github.com/ChrisPittman343/ten-men"
-      target="_blank"
-      rel="noopener noreferrer">Source</a
-    >
-    <span
-      >&copy; 2022 <a
-        href="https://github.com/ChrisPittman343"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Chris Pittman</a
-      >
-    </span>
-  </div>
+<footer
+  class="text-tertiary absolute bottom-4 left-1/2 flex w-4/5 -translate-x-1/2 flex-col items-center gap-2 text-xs"
+>
+  <div>Created for the Boys.</div>
+  <a
+    class="opacity-50"
+    href="https://github.com/ChrisPittman343/ten-men"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span class="font-mono">{"</>"}</span> by Chris P
+  </a>
 </footer>
-
-<style lang="postcss">
-  #bottom {
-    @apply text-secondary/50;
-  }
-</style>

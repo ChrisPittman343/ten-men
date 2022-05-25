@@ -1,7 +1,5 @@
-<div
-  class="border-l-8 border-primary px-8 py-2 flex flex-col gap-y-8 backdrop-blur-md"
->
-  <h2 class="font-bold text-3xl">
+<div class="flex max-w-sm flex-col gap-y-4 py-2 backdrop-blur-md">
+  <h2 class="text-xl font-medium">
     Step <slot name="number" />
     <span>
       <slot name="title" />
@@ -23,18 +21,14 @@
 
 <style lang="postcss">
   span:global() {
-    @apply text-secondary/50 text-2xl font-normal ml-4;
-  }
-
-  p:global() {
-    @apply text-lg;
+    @apply text-secondary/50 ml-4 text-xl font-normal;
   }
 
   div div:global() {
-    @apply flex justify-end items-center gap-x-4;
+    @apply flex items-center justify-end gap-x-4;
   }
 
   .error {
-    @apply font-bold text-red;
+    @apply text-red font-bold;
   }
 </style>

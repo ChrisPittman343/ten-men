@@ -12,6 +12,7 @@
     axios
       .get(`/api/match/${datePlayed}`)
       .then((res) => {
+        console.log(res.data);
         match = res.data;
       })
       .catch((err) => {
@@ -22,8 +23,12 @@
 </script>
 
 <svelte:head>
-  <!-- todo -->
-  <title>Match | 10M</title>
+  {#if match}
+    <title>{match.map}, {new Date(match.datePlayed).toDateString()} | 10M</title
+    >
+  {:else}
+    <title>Match | 10M</title>
+  {/if}
 </svelte:head>
 
 <Construction />

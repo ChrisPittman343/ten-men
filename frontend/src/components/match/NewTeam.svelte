@@ -7,7 +7,7 @@
   $: team.sort((a, b) => b.score - a.score);
 </script>
 
-<table class="relative block pl-16 w-full pb-8">
+<table class="relative block w-full pl-16 pb-8">
   <RoundsWon count={roundsWon} />
   <tr>
     <th>Name</th>
@@ -26,7 +26,7 @@
           type="text"
           aria-label={"Real name for " + team[memberIx].username}
           bind:value={team[memberIx].playerName}
-          class="text-base px-1 py-0.5 max-w-[128px] mr-4 text-secondary"
+          class="text-secondary mr-4 max-w-[128px] px-1 py-0 text-base"
         />
         {member.username}
       </td>
@@ -43,7 +43,7 @@
 <style lang="postcss">
   td,
   th {
-    @apply text-left pr-4 py-1 w-full text-sm;
+    @apply w-full py-1 pr-4 text-left text-sm;
   }
 
   th {

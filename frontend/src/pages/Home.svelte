@@ -4,10 +4,7 @@
   import { navigate } from "svelte-routing";
   import BasicMatch from "../components/match/basic/BasicMatch.svelte";
   import TopPlayerCard from "../components/players/TopPlayerCard.svelte";
-  import {
-    addNotification,
-    addServerErrorNotification,
-  } from "../util/addNotification";
+  import { addServerErrorNotification } from "../util/addNotification";
 
   let overviewData: OverviewData;
 
@@ -29,8 +26,8 @@
 </svelte:head>
 
 {#if overviewData?.topPlayers?.length}
-  <div class="flex justify-center max-w-7xl m-auto py-4 gap-12">
-    <div id="top-players" class="flex flex-col justify-between gap-y-5 h-min">
+  <div class="m-auto flex max-w-7xl justify-center gap-12 py-4">
+    <div id="top-players" class="flex h-min flex-col justify-between gap-y-5">
       <header>
         <h1 class="text-2xl font-bold">Top Players</h1>
       </header>

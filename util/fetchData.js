@@ -122,37 +122,50 @@ const getMatches = async (db, startDate, endDate) => {
  * @param {*} datePlayed
  */
 const getMatch = async (db, datePlayed) => {
-  const { rows } = await db.query(
-    `
-
-    SELECT  TeamMembers.playername "playerName", 
-    username,
-    ping,
-    kills,
-    assists,
-    deaths,
-    hs,
-    mvp,
-    score,
-    Teams.teamID "teamID", 
-    roundsWon "roundsWon", 
-    Matches.matchID "matchID", 
-    map, 
-    duration, 
-    datePlayed "datePlayed" 
+  const { rows: statsForMatches } = await db.query(
+    ` SELECT  TeamMembers.playername "playerName", 
+            username,
+            ping,
+            kills,
+            assists,
+            deaths,
+            hs,
+            mvp,
+            score,
+            Teams.teamID "teamID", 
+            roundsWon "roundsWon", 
+            Matches.matchID "matchID", 
+            map, 
+            duration, 
+            datePlayed "datePlayed" 
     FROM Matches 
     INNER JOIN Teams USING (matchID)
     INNER JOIN TeamMembers USING (teamID)
     WHERE datePlayed = $1
     GROUP BY playerName, TeamMembers.teamID,  Matches.matchID, Matches.datePlayed, Matches.map, Matches.duration, Teams.matchID, Teams.teamID
-    ORDER BY datePlayed DESC, TeamMembers.teamID DESC, TeamMembers.score DESC
+    ORDER BY TeamMembers.teamID DESC, TeamMembers.score DESC
     LIMIT 10
-  `,
+    `,
     [datePlayed]
   );
 
-  const match = rows[0];
-  return match;
+  let recentMatch = {};
+  statsForMatches.forEach((stats) => {
+    if (!recentMatch.matchID)
+      recentMatch = {
+        matchID: stats.matchID,
+        map: stats.map,
+        duration: stats.duration,
+        datePlayed: parseInt(stats.datePlayed),
+        players: [],
+      };
+
+    if (!stats.wins) stats.wins = 0;
+
+    recentMatch.players.push(stats);
+  });
+
+  return recentMatch;
 };
 
 /**

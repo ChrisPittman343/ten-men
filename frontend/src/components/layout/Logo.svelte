@@ -1,10 +1,31 @@
 <script lang="ts">
-  import { Link } from "svelte-routing";
+  import { onMount } from "svelte";
+  import { link } from "svelte-routing";
+  import { getContext } from "svelte";
+  import { ROUTER } from "svelte-routing/src/contexts";
+
+  const { activeRoute } = getContext(ROUTER);
+  let active: boolean;
+
+  onMount(() => {
+    activeRoute.subscribe((val) => {
+      if (val) active = val.uri === "/";
+    });
+  });
 </script>
 
-<Link to="/" class="relative text-2xl font-bold tracking-[0.3em] group">
-  <span class="drop-shadow-tight "> 10M </span>
-  <div
-    class="w-16 h-2 -rotate-2 absolute bottom-1 right-0.5 -z-10 bg-primary "
-  />
-</Link>
+<a
+  href="/"
+  use:link
+  class:active
+  class="text-tertiary/50 group relative mx-auto p-1 text-3xl font-bold tracking-[0.3em] transition-colors"
+>
+  10M
+</a>
+
+<style lang="postcss">
+  .active,
+  a:hover {
+    @apply text-tertiary;
+  }
+</style>

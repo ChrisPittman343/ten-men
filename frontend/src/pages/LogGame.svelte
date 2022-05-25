@@ -59,11 +59,10 @@
   <title>Log Match | 10M</title>
 </svelte:head>
 
-<div class="flex max-w-7xl items-center min-h-[80vh] pt-12 m-auto gap-8">
-  <div id="instructions" class="max-w-lg w-full">
-    <header class="pb-8">
-      <h1 class="text-5xl font-bold pb-2">Log Match</h1>
-      <p class="text-xl">Add a game to the database</p>
+<div class="flex gap-8">
+  <div id="instructions" class="w-full max-w-sm">
+    <header class="border-secondary border-b-2">
+      <h1 class="text-2xl font-bold">Log Match</h1>
     </header>
     {#if !parsedData}
       <LoggingStep>
@@ -124,14 +123,14 @@
       <SelectionTooltip />
     {/if}
     {#if parsedData}
-      <header class="py-4">
-        <h2 class="inline-block text-2xl font-bold pr-8">New Match</h2>
+      <header class="border-secondary mb-4 border-b-2">
+        <h2 class="inline-block pr-8 text-2xl font-bold">New Match</h2>
         <span class="text-secondary/50"
           >If the stats don't look right, try redoing step 1
         </span>
       </header>
       <div id="parsed-container" class="backdrop-blur-md">
-        <BasicMatchBanner match={parsedData} logged={false} />
+        <BasicMatchBanner match={parsedData} />
         <div class="h-4" />
         {#each parsedData.teams as team, teamIx}
           <NewTeam bind:team roundsWon={parsedData.score[teamIx]} />
